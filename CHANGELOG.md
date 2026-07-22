@@ -1,9 +1,7 @@
-# Change Log
+### Release Notes
 
-All notable changes to the "algodoo-thyme" extension will be documented in this file.
+### 0.1.0
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+- Coloring for data types (numbers, strings, bools)
+- Coloring for the print() function.
+- Coloring for the e and Scene objects + their child properties.
