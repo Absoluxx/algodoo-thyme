@@ -23,7 +23,13 @@
 			"include": "#api"
 		},
 		{
+			"include": "#variables"
+		},
+		{
 			"include": "#functions"
+		},
+		{
+			"include": "#event-object-properties"
 		}
 	],
 
@@ -33,7 +39,7 @@
 			"patterns": [
 				{
 					"name": "comment.line.double-slash.thyme",
-					"match": "//.*$"
+					"match": "(?i)//.*$"
 				}
 			]
 		},
@@ -42,31 +48,31 @@
 			"patterns": [
 				{
 					"name": "constant.numeric.float.decimal.thyme",
-					"match": "\\b\\d+\\.\\d+\\b"
+					"match": "(?i)\\b\\d+\\.\\d+\\b"
 				},
 				{
 					"name": "constant.numeric.float.scientific.thyme",
-					"match": "\\b\\d+(\\.\\d+)?[eE][+-]?\\d+\\b"
+					"match": "(?i)\\b\\d+(\\.\\d+)?[eE][+-]?\\d+\\b"
 				},
 				{
 					"name": "constant.numeric.float.infinity.thyme",
-					"match": "(\\+|-)?inf|[+-]?∞"
+					"match": "(?i)(\\+|-)?inf|[+-]?∞"
 				},
 				{
 					"name": "constant.numeric.float.nan.thyme",
-					"match": "\\bNaN\\b"
+					"match": "(?i)\\bNaN\\b"
 				},
 								{
 					"name": "constant.numeric.integer.decimal.thyme",
-					"match": "\\b\\d+\\b"
+					"match": "(?i)\\b\\d+\\b"
 				},
 				{
 					"name": "constant.numeric.integer.binary.thyme",
-					"match": "\\b0b[01]+\\b"
+					"match": "(?i)\\b0b[01]+\\b"
 				},
 				{
 					"name": "constant.numeric.integer.hex.thyme",
-					"match": "\\b0x[0-9A-Fa-f]+\\b"
+					"match": "(?i)\\b0x[0-9A-Fa-f]+\\b"
 				}
 			]
 		},
@@ -75,7 +81,7 @@
 			"patterns": [
 				{
 					"name": "constant.language.boolean.thyme",
-					"match": "\\b(true|false)\\b"
+					"match": "(?i)\\b(true|false)\\b"
 				}
 			]
 		},
@@ -128,21 +134,74 @@
 			"patterns": [
 				{
 					"name": "support.function.builtin.thyme",
-					"match": "\\bprint(?=\\s*\\()"
+					"match": "(?i)\\bprint(?=\\s*\\()"
 				}
 			]
 		},
 
 		"api": {
-    "patterns": [
-        {
-            "include": "#scene-api"
-        },
-        {
-            "include": "#event-api"
-        }
-    ]
-},
+			"patterns": [
+				{
+					"include": "#event-api"
+				},
+				{
+					"include": "#rand-api"
+				},
+				{
+					"include": "#scene-api"
+				}
+			]
+		},
+
+		"event-api": {
+			"patterns": [
+				{
+				"begin": "\\b([A-Za-z_][A-Za-z0-9_]*)(\\.)(?=(this|other)\\b)",
+				"beginCaptures": {
+					"1": {
+					"name": "variable.parameter.thyme"
+					},
+					"2": {
+					"name": "punctuation.accessor.thyme"
+					}
+				},
+				"end": "(?=[^A-Za-z0-9_])",
+				"patterns": [
+					{
+					"name": "variable.language.thyme",
+					"match": "(?i)\\b(this|other)\\b"
+					}
+				]
+				}
+			]
+			},
+
+				"rand-api": {
+			"patterns": [
+				{
+					"begin": "\\b(rand)(\\.)",
+					"beginCaptures": {
+						"1": {
+							"name": "support.class.thyme"
+						},
+						"2": {
+							"name": "punctuation.accessor.thyme"
+						}
+					},
+					"end": "(?=[^A-Za-z0-9_])",
+					"patterns": [
+						{
+							"name": "variable.language.thyme",
+							"match": "(?i)\\b(boolean|direction2D|normal|normal2D|uniform01)\\b"
+						},
+						{
+							"name": "punctuation.accessor.thyme",
+							"match": "(?i)\\."
+						}
+					]
+				}
+			]
+		},
 
 		"scene-api": {
 			"patterns": [
@@ -160,40 +219,39 @@
 					"patterns": [
 						{
 							"name": "variable.language.thyme",
-							"match": "\\b(my|temp|sounds|textures)\\b"
+							"match": "(?i)\\b(my|temp|sounds|textures)\\b"
 						},
 						{
 							"name": "punctuation.accessor.thyme",
-							"match": "\\."
+							"match": "(?i)\\."
 						}
 					]
 				}
 			]
 		},
 
-		"event-api": {
+		"variables": {
 			"patterns": [
 				{
-					"begin": "\\b(e)(\\.)",
-					"beginCaptures": {
-						"1": {
-							"name": "variable.parameter.thyme"
-						},
-						"2": {
-							"name": "punctuation.accessor.thyme"
-						}
-					},
-					"end": "(?=[^A-Za-z0-9_])",
-					"patterns": [
-						{
-							"name": "variable.language.thyme",
-							"match": "\\b(this|other)\\b"
-						},
-						{
-							"name": "punctuation.accessor.thyme",
-							"match": "\\."
-						}
-					]
+					"name": "variable.other.scene.thyme",
+					"match": "(?i)(?<=\\bScene\\.my\\.)\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+				},
+				{
+					"name": "variable.other.scene.thyme",
+					"match": "(?i)(?<=\\bScene\\.temp\\.)\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+				},
+				{
+					"name": "variable.other.object.thyme",
+					"match": "(?i)\\b_[A-Za-z0-9_]+\\b"
+				}
+			]
+		},
+
+		"event-object-properties": {
+			"patterns": [
+				{
+					"name": "support.variable.property.thyme",
+					"match": "(?i)(?<=\\b[A-Za-z_][A-Za-z0-9_]*\\.(?:this|other)\\.)\\b(color|colorHSVA|entityID|resources|timeToLive|zDepth|buttonMirror|buttonDestroy|layer|Liquify|adhesion|airFrictionMult|angle|angvel|area|attraction|attractionType|body|collideSet|collideWater|controllerAcc|controllerInvertX|controllerInvertY|controllerReverseXY|density|drawBorder|edgeBlur|friction|geomID|glued|heteroCollide|immortal|inertiaMultiplier|killer|materialName|materialVelocity|opaqueBorders|pos|reflectiveness|refractiveIndex|restitution|showForceArrows|showMomentum|showVelocity|texture|textureClamped|textureMatrix|vel|velocityDamping|forceController|ruler|size|text|textColor|textConstrained|textFont|textFontSize|textScale|drawCake|protractor|radius|forceVertexDrawing|surfaces|polyTrans|polyMeshResolution|allowDirectSolve|constant|dampingFactor|disableCollisions|forceDirectSolve|legacyMode|length|lineEndPoint0|lineEndPoint1|totImp|followGeometry|geom|relPoint|rotation|geom0|geom0pos|geom1|geom1pos|allowDirectSolve|autoBend|autoBreak|bend|bendConstant|bendTarget|ccw|distanceLimit|hingeConstant|impulseLimit|motor|motorSpeed|motorTorque|buttonBack|buttonBrake|buttonForward|totImp3|force|activationButton|cutter|fadeDist|maxCuts|maxRays|showLaserBodyAttrib|fadeTime)\\b"
 				}
 			]
 		},
@@ -204,8 +262,10 @@
 			"end": "\"",
 			"patterns": [
 				{
-					"name": "constant.character.escape.thyme",
-					"match": "\\\\(\\\\|\"|n|t)"
+					"include": "#markup"
+				},
+				{
+					"include": "#escapes"
 				}
 			]
 		},
@@ -216,9 +276,90 @@
 			"end": "\"",
 			"patterns": [
 				{
+					"include": "#markup"
+				},
+				{
+					"include": "#verbatim-escapes"
+				}
+			]
+		},
+
+		"escapes": {
+			"patterns": [
+				{
+					"name": "constant.character.escape.thyme",
+					"match": "\\\\(\\\\|\"|n|t)"
+				}
+			]
+		},
+
+		"verbatim-escapes": {
+			"patterns": [
+				{
 					"name": "constant.character.escape.verbatim.thyme",
 					"match": "\"\""
 				}
+			]
+		},
+
+		"markup": {
+			"patterns": [
+
+				{
+					"name": "constant.character.escape.entity.thyme",
+					"match": "&(amp|apos|gt|lt|quot);"
+				},
+
+				{
+					"name": "constant.character.escape.entity.numeric.thyme",
+					"match": "&#\\d+;"
+				},
+
+				{
+					"name": "constant.character.escape.entity.numeric.thyme",
+					"match": "&#x[0-9A-Fa-f]+;"
+				},
+
+				{
+					"name": "constant.character.escape.markup.thyme",
+					"match": "</?(markup|b|i|u|s|tt|big|small|sup|sub)\\s*>"
+				},
+
+				{
+					"begin": "<span\\b",
+					"beginCaptures": {
+						"0": {
+							"name": "constant.character.escape.markup.thyme"
+						}
+					},
+					"end": ">",
+					"endCaptures": {
+						"0": {
+							"name": "constant.character.escape.markup.thyme"
+						}
+					},
+					"patterns": [
+						{
+							"name": "entity.other.attribute-name.thyme",
+							"match": "\\b[a-zA-Z_][a-zA-Z0-9_-]*(?=\\=)"
+						},
+						{
+							"name": "keyword.operator.assignment.thyme",
+							"match": "="
+						},
+						{
+							"name": "string.quoted.double.attribute-value.thyme",
+							"begin": "\"",
+							"end": "\""
+						}
+					]
+				},
+
+				{
+					"name": "constant.character.escape.markup.thyme",
+					"match": "</span\\s*>"
+				}
+
 			]
 		}
 	}

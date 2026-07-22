@@ -2,7 +2,7 @@
   "name": "algodoo-thyme",
   "displayName": "Algodoo Thyme",
   "description": "Language support for Thyme, the proprietary scripting language of Algodoo.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.125.0"
   },
