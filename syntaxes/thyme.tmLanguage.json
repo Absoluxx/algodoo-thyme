@@ -1,0 +1,225 @@
+{
+	"scopeName": "source.thyme",
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Thyme",
+
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#booleans"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#punctuation"
+		},
+		{
+			"include": "#api"
+		},
+		{
+			"include": "#functions"
+		}
+	],
+
+	"repository": {
+
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.double-slash.thyme",
+					"match": "//.*$"
+				}
+			]
+		},
+
+		"numbers": {
+			"patterns": [
+				{
+					"name": "constant.numeric.float.decimal.thyme",
+					"match": "\\b\\d+\\.\\d+\\b"
+				},
+				{
+					"name": "constant.numeric.float.scientific.thyme",
+					"match": "\\b\\d+(\\.\\d+)?[eE][+-]?\\d+\\b"
+				},
+				{
+					"name": "constant.numeric.float.infinity.thyme",
+					"match": "(\\+|-)?inf|[+-]?∞"
+				},
+				{
+					"name": "constant.numeric.float.nan.thyme",
+					"match": "\\bNaN\\b"
+				},
+								{
+					"name": "constant.numeric.integer.decimal.thyme",
+					"match": "\\b\\d+\\b"
+				},
+				{
+					"name": "constant.numeric.integer.binary.thyme",
+					"match": "\\b0b[01]+\\b"
+				},
+				{
+					"name": "constant.numeric.integer.hex.thyme",
+					"match": "\\b0x[0-9A-Fa-f]+\\b"
+				}
+			]
+		},
+
+		"booleans": {
+			"patterns": [
+				{
+					"name": "constant.language.boolean.thyme",
+					"match": "\\b(true|false)\\b"
+				}
+			]
+		},
+
+		"strings": {
+			"patterns": [
+				{
+					"include": "#verbatim-string"
+				},
+				{
+					"include": "#normal-string"
+				}
+			]
+		},
+
+		"punctuation": {
+			"patterns": [
+				{
+					"name": "punctuation.definition.brackets.begin.thyme",
+					"match": "\\["
+				},
+				{
+					"name": "punctuation.definition.brackets.end.thyme",
+					"match": "\\]"
+				},
+				{
+					"name": "punctuation.definition.parentheses.begin.thyme",
+					"match": "\\("
+				},
+				{
+					"name": "punctuation.definition.parentheses.end.thyme",
+					"match": "\\)"
+				},
+				{
+					"name": "punctuation.definition.braces.begin.thyme",
+					"match": "\\{"
+				},
+				{
+					"name": "punctuation.definition.braces.end.thyme",
+					"match": "\\}"
+				},
+				{
+					"name": "punctuation.separator.comma.thyme",
+					"match": ","
+				}
+			]
+		},
+
+		"functions": {
+			"patterns": [
+				{
+					"name": "support.function.builtin.thyme",
+					"match": "\\bprint(?=\\s*\\()"
+				}
+			]
+		},
+
+		"api": {
+    "patterns": [
+        {
+            "include": "#scene-api"
+        },
+        {
+            "include": "#event-api"
+        }
+    ]
+},
+
+		"scene-api": {
+			"patterns": [
+				{
+					"begin": "\\b(Scene)(\\.)",
+					"beginCaptures": {
+						"1": {
+							"name": "support.class.thyme"
+						},
+						"2": {
+							"name": "punctuation.accessor.thyme"
+						}
+					},
+					"end": "(?=[^A-Za-z0-9_])",
+					"patterns": [
+						{
+							"name": "variable.language.thyme",
+							"match": "\\b(my|temp|sounds|textures)\\b"
+						},
+						{
+							"name": "punctuation.accessor.thyme",
+							"match": "\\."
+						}
+					]
+				}
+			]
+		},
+
+		"event-api": {
+			"patterns": [
+				{
+					"begin": "\\b(e)(\\.)",
+					"beginCaptures": {
+						"1": {
+							"name": "variable.parameter.thyme"
+						},
+						"2": {
+							"name": "punctuation.accessor.thyme"
+						}
+					},
+					"end": "(?=[^A-Za-z0-9_])",
+					"patterns": [
+						{
+							"name": "variable.language.thyme",
+							"match": "\\b(this|other)\\b"
+						},
+						{
+							"name": "punctuation.accessor.thyme",
+							"match": "\\."
+						}
+					]
+				}
+			]
+		},
+
+		"normal-string": {
+			"name": "string.quoted.double.thyme",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.thyme",
+					"match": "\\\\(\\\\|\"|n|t)"
+				}
+			]
+		},
+
+		"verbatim-string": {
+			"name": "string.quoted.double.verbatim.thyme",
+			"begin": "@\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.verbatim.thyme",
+					"match": "\"\""
+				}
+			]
+		}
+	}
+}

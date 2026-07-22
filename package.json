@@ -1,0 +1,25 @@
+{
+  "name": "algodoo-thyme",
+  "displayName": "Algodoo Thyme",
+  "description": "Language support for Thyme, the proprietary scripting language of Algodoo.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "thyme",
+      "aliases": ["Thyme", "thyme"],
+      "extensions": [".thy"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "thyme",
+      "scopeName": "source.thyme",
+      "path": "./syntaxes/thyme.tmLanguage.json"
+    }]
+  }
+}
