@@ -14,3 +14,13 @@
 - Made the grammar case insensitive.
 - Allowed the event argument parameter to be named anything.
 - Minor organization improvements in the files.
+
+### 0.3.0
+
+- Coloring for most app and gui properties/functions.
+- Coloring for scene, god, keys, and sph properties/functions.
+- Coloring for all paramaterless functions.
+- Coloring for user-defined functions.
+- Coloring for many other miscellaneous properties/functions.
+- Redefined event argument coloring.
+- Minor organization improvements in the files.

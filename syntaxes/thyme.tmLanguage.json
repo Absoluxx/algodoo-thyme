@@ -1,366 +1,679 @@
 {
-	"scopeName": "source.thyme",
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Thyme",
+"scopeName": "source.thyme",
+"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+"name": "Thyme",
+"patterns": [
+	{"include": "#comments"},
+	{"include": "#numbers"},
+	{"include": "#booleans"},
+	{"include": "#strings"},
+	{"include": "#punctuation"},
+	{"include": "#event-special-object-properties"},
+	{"include": "#event-properties"},
+	{"include": "#event-object-properties"},
+	{"include": "#api"},
+	{"include": "#variables"},
+	{"include": "#functions"},
+	{"include": "#user-functions"},
+	{"include": "#parameterless-functions"}],
+"repository": {
 
+
+
+"comments": {
+	"patterns": [
+	{
+		"name": "comment.block.thyme",
+		"begin": "/\\*",
+		"end": "\\*/"
+	},
+	{
+		"name": "comment.line.double-slash.thyme",
+		"match": "(?i)//.*$"
+	}]},
+
+
+
+"numbers": {
+	"patterns": [
+	{
+		"name": "constant.numeric.float.decimal.thyme",
+		"match": "(?i)\\b\\d+\\.\\d+\\b"
+	},
+	{
+		"name": "constant.numeric.float.scientific.thyme",
+		"match": "(?i)\\b\\d+(\\.\\d+)?[eE][+-]?\\d+\\b"
+	},
+	{
+		"name": "constant.numeric.float.infinity.thyme",
+		"match": "(?i)(\\+|-)?inf|[+-]?∞"
+	},
+	{
+		"name": "constant.numeric.float.nan.thyme",
+		"match": "(?i)\\bNaN\\b"
+	},
+					{
+		"name": "constant.numeric.integer.decimal.thyme",
+		"match": "(?i)\\b\\d+\\b"
+	},
+	{
+		"name": "constant.numeric.integer.binary.thyme",
+		"match": "(?i)\\b0b[01]+\\b"
+	},
+	{
+		"name": "constant.numeric.integer.hex.thyme",
+		"match": "(?i)\\b0x[0-9A-Fa-f]+\\b"
+	}]},
+
+
+
+"booleans": {
+	"patterns": [
+	{
+		"name": "constant.language.boolean.thyme",
+		"match": "(?i)\\b(true|false)\\b"
+	}]},
+
+
+
+"strings": {
+	"patterns": [
+	{
+		"include": "#verbatim-string"
+	},
+	{
+		"include": "#normal-string"
+	}]},
+
+
+
+"normal-string": {
+	"name": "string.quoted.double.thyme",
+	"begin": "\"",
+	"end": "\"",
+	"patterns": [
+	{
+		"include": "#markup"
+	},
+	{
+		"include": "#escapes"
+	}]},
+
+
+
+"verbatim-string": {
+	"name": "string.quoted.double.verbatim.thyme",
+	"begin": "@\"",
+	"end": "\"",
+	"patterns": [
+	{
+		"include": "#markup"
+	},
+	{
+		"include": "#verbatim-escapes"
+	}]},
+
+
+
+"escapes": {
+	"patterns": [
+	{
+		"name": "constant.character.escape.thyme",
+		"match": "\\\\(\\\\|\"|n|t)"
+	}]},
+
+
+
+"verbatim-escapes": {
+	"patterns": [
+	{
+		"name": "constant.character.escape.verbatim.thyme",
+		"match": "\"\""
+	}]},
+
+
+
+"markup": {
+	"patterns": [
+	{
+		"name": "constant.character.escape.entity.thyme",
+		"match": "&(amp|apos|gt|lt|quot);"
+	},
+	{
+		"name": "constant.character.escape.entity.numeric.thyme",
+		"match": "&#\\d+;"
+	},
+	{
+		"name": "constant.character.escape.entity.numeric.thyme",
+		"match": "&#x[0-9A-Fa-f]+;"
+	},
+	{
+		"name": "constant.character.escape.markup.thyme",
+		"match": "</?(markup|b|i|u|s|tt|big|small|sup|sub)\\s*>"
+	},
+	{
+		"begin": "<span\\b",
+		"beginCaptures": {
+			"0": {
+				"name": "constant.character.escape.markup.thyme"
+			}
+		},
+		"end": ">",
+		"endCaptures": {
+			"0": {
+				"name": "constant.character.escape.markup.thyme"
+			}
+		},
+		"patterns": [
+		{
+			"name": "entity.other.attribute-name.thyme",
+			"match": "\\b[a-zA-Z_][a-zA-Z0-9_-]*(?=\\=)"
+		},
+		{
+			"name": "keyword.operator.assignment.thyme",
+			"match": "="
+		},
+		{
+			"name": "string.quoted.double.attribute-value.thyme",
+			"begin": "\"",
+			"end": "\""
+		}]},
+	{
+		"name": "constant.character.escape.markup.thyme",
+		"match": "</span\\s*>"
+	}]},
+
+
+
+"punctuation": {
+	"patterns": [
+	{
+		"name": "punctuation.definition.brackets.begin.thyme",
+		"match": "\\["
+	},
+	{
+		"name": "punctuation.definition.brackets.end.thyme",
+		"match": "\\]"
+	},
+	{
+		"name": "punctuation.definition.parentheses.begin.thyme",
+		"match": "\\("
+	},
+	{
+		"name": "punctuation.definition.parentheses.end.thyme",
+		"match": "\\)"
+	},
+	{
+		"name": "punctuation.definition.braces.begin.thyme",
+		"match": "\\{"
+	},
+	{
+		"name": "punctuation.definition.braces.end.thyme",
+		"match": "\\}"
+	},
+	{
+		"name": "punctuation.separator.comma.thyme",
+		"match": ","
+	}]},
+
+
+
+"parameterless-functions": {
+	"patterns": [
+	{
+		"name": "support.function.builtin.thyme",
+		"match": "(?i)\\b(groovyOff|exit|quit|groovyOff|groovyOn|time|readable|ResetAll|eval|geval)\\b"
+	}]},
+
+
+
+"functions": {
+	"patterns": [
+	{
+		"name": "support.function.builtin.thyme",
+		"match": "(?i)\\b(print|Bench_Steps|cos|sin|clamp|if|inclusive_range|lerp|ResetTree|for|if|if_then_else)(?=\\s*\\()"
+	}]},
+
+
+
+"user-functions": {
+	"patterns": [
+	{
+		"name": "support.function.builtin.thyme",
+		"match": "(?i)\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*(:?=)\\s*\\(\\s*\\)\\s*=>\\s*\\{)"
+	}]},
+
+
+
+"api": {
+	"patterns": [
+	{"include": "#event-api"},
+	{"include": "#rand-api"},
+	{"include": "#scene-api"},
+	{"include": "#math-api"},
+	{"include": "#string-api"},
+	{"include": "#set-api"},
+	{"include": "#keys-api"},
+	{"include": "#sph-api"},
+	{"include": "#app-api"},
+	{"include": "#god-api"}]},
+
+
+
+"app-api": {
+	"patterns": [
+	{
+		"begin": "(?i)\\b(app)(\\.)",
+		"beginCaptures": {
+			"1": {
+				"name": "support.class.thyme"
+			},
+			"2": {
+				"name": "punctuation.accessor.thyme"
+			}
+		},
+		"end": "(?i)(?=[^A-Za-z0-9_])",
+		"patterns": [
+		{
+			"name": "support.function.builtin.thyme",
+			"match": "(?i)\\b(Step_N)\\b(?=\\s*\\()"
+		},
+		{
+			"name": "support.function.builtin.thyme",
+			"match": "(?i)\\b(addUndoPoint|doCheckforupdates|freeupmemory|redo|undo|Step)\\b"
+		},
+		{
+			"begin": "(?i)\\b(Grid)(\\.)",
+			"beginCaptures": {
+				"1": {
+					"name": "support.class.thyme"
+				},
+				"2": {
+					"name": "punctuation.accessor.thyme"
+				}
+			},
+			"end": "(?=[^A-Za-z0-9_])",
+			"patterns": [
+			{
+				"name": "support.variable.property.thyme",
+				"match": "(?i)\\b(base|grid|numAxes|opacity|scale|snap|topness)\\b"
+			},
+			{
+				"name": "punctuation.accessor.thyme",
+				"match": "\\."
+			}]},
+		{
+			"begin": "(?i)\\b(Background)(\\.)",
+			"beginCaptures": {
+				"1": {
+					"name": "support.class.thyme"
+				},
+				"2": {
+					"name": "punctuation.accessor.thyme"
+				}
+			},
+			"end": "(?=[^A-Za-z0-9_])",
+			"patterns": [
+			{
+				"name": "support.variable.property.thyme",
+				"match": "(?i)\\b(cloudOpacity|drawClouds|skyColor|fadeCloudsOnSimStop)\\b"
+			},
+			{
+				"name": "punctuation.accessor.thyme",
+				"match": "\\."
+			}]},
+		{
+			"begin": "(?i)\\b(GUI)(\\.)",
+			"beginCaptures": {
+				"1": {
+					"name": "support.class.thyme"
+				},
+				"2": {
+					"name": "punctuation.accessor.thyme"
+				}
+			},
+			"end": "(?=[^A-Za-z0-9_])",
+			"patterns": [
+			{
+				"name": "support.variable.property.thyme",
+				"match": "(?i)\\b(canPan|panFactor|scrollZoom|scrollZoomFactor|allowDrawSelect|alikeTolerance|dragUndo|dropTexGeomGen|fastSketchToolPreview|selectFactor|sketchMorphDelay|sketchMorphTime|Instaerase|angleColor|tutorialEncircleColor|autoFit|forceFitFactor|velFitFactor|momFitFactor|drawTouches|autoScaleBoxText|blurMaxDraw|blurSpacing|browserThumbnailSize|drawHingesWhenRunning|fixedContextMenu|fontMenuPreview|geomGen_cutoff|geomgen_grow|geomgen_growopaque|geomgen_maxborderallowance|geomgen_minarea|geomgen_mindeltatolerance|geomgen_mintolerance|geomgen_recognizematerial|geomgen_recognizematerial_cutoff|geomgen_recognizematerial_variancefactor|geomgen_removeopaqueholes|geomgen_resolution|geomgen_smartbordercolorchoice|geomgen_tolerance|infoUpdateInterval|prescalebrowserthumbnails|rotatebackground|smoothdist|toolcursoroffset|toolspecificcursors|trapUser|useHSL|arrowkeysmove|ctrlselection|mouseoverhighlight|pressandholdmenus|toolgesturesensitivity|toolgestures)\\b"
+			},
+			{
+			"begin": "(?i)\\b(Forces)(\\.)",
+			"beginCaptures": {
+				"1": {
+					"name": "support.class.thyme"
+				},
+				"2": {
+					"name": "punctuation.accessor.thyme"
+				}
+			},
+			"end": "(?=[^A-Za-z0-9_])",
+			"patterns": [
+			{
+				"name": "support.variable.property.thyme",
+				"match": "(?i)\\b(airBuoyancy|airBuoyancyText|airFriction|airFrictionText|angMomScale|angVelScale|anglularMomentum|angularMomentumText|chain|attractionText|attraction|attractionText|chainText|contactCombinationDisstance|drawAngles|drawComponents|drawForces|drawMomentumns|drawNames|drawValues|external|externalText|forceScale|friction|frictionProjection|frictionText|gravity|gravityText|hasAngMomScale|hasAngVelScale|hasForceScale|hasMomScale|hasTorqueScale|hasVelScale|hinge|hingeText|linearMomentumText|maxArrowLength|momScale|normal|normalText|rotation|spring|thruster|springText|thrusterText|torque|torqueScale|torqueText|total|totalText|velScale|velocities)\\b"
+			},
+			{
+				"name": "punctuation.accessor.thyme",
+				"match": "\\."
+			}]},
+			{
+				"name": "punctuation.accessor.thyme",
+				"match": "\\."
+			}]},
+			{
+				"name": "variable.language.thyme",
+				"match": "(?i)\\b(mousePos|fadeColor|fadeRotate|fadeScale|fadeTranslate|maxSPHSpawn|waterColor|waterElongation|waterFanceyFactor|waterMaxElongation|waterReflectiveness|waterRefractiveIndex|waterTracerLightness|waterTracerSize|waterTracers|borderSelectedWidthFactor|borderWidth|chainDensityFactor|lineWidth|maxBorderArea|maxBorderAreaSpecial|maxCogs|laserBroadPhase|laserEvents|laserFuzziness|laserResolution|laserSuperBoost|laserWaterBVH|laserWidth|maxTracerLife|numColorsinRainbow|tracerFuzziness|tracerOverdraw|useLaserFuzzNoShaders|drawBCs|drawBodyCenters|drawCables|drawClipPlanes|drawCollisions|drawMapOBBs|drawOBBs|drawParticleCenters|drawParticleNeighbors|drawScaleIndicator|drawSelectionOBB|drawVertices|enableScriptMenu|fadeAnglePickerTime|polytoolPreviewColor|ScaleGravityField|ShowGravityField|drawVelocityFactor|scalePOWattraction|ScalePOWControllerAcc|ScalePOWHingeImpulseBreakLimit|scalePOWmotorspeed|ScalePOWmotortorque|ScalePOWSpringDamping|ScalePOWStringStrength|POWThrusterForce|alwaysCalcContacts|alwaysCalculateForces|DPI|HQPolygons|autosaveEnable|autosaveTime|changeSimWhenvisualising|checkforupdates|enableUndoMerge|forceVertexPolygonDrawing|groundPlane|hideWelcomeScreen|killerPlanes|language|lastversion|marchingSquaresResolution|maxPlotPoints|maxPointDist|minPointDist|maxUndo|metaCutoff|movetoTrashonOverwrite|pointSize|sceneFadeInTime|screenshotswithalpha|transformAttribs|updateInterval|currentPalette|timeUntilRealTool)\\b"
+			},
+			{
+				"name": "punctuation.accessor.thyme",
+				"match": "(?i)\\."
+			}
+		]
+	}]},
+
+					
+
+"event-api": {
+	"patterns": [
+	{
+		"name": "variable.parameter.thyme",
+		"match": "(?i)\\b[A-Za-z_][A-Za-z0-9_]*(?=\\.(this|other|clickCount|handled|normal|soundGain|pos|geom|hsv|laser|keyChar|keyCode|pressed|handled|dt)\\b)"
+	}]
+},
+
+
+
+"god-api": {
+	"patterns": [
+	{
+		"begin": "(?i)\\b(god)(\\.)",
+		"beginCaptures": {
+			"1": {
+				"name": "support.class.thyme"
+			},
+			"2": {
+				"name": "punctuation.accessor.thyme"
+			}
+		},
+		"end": "(?=[^A-Za-z0-9_])",
+		"patterns": [
+		{
+			"name": "support.function.thyme",
+			"match": "(?i)\\b(setFullscreen|showWindows|addCheckbox|addLabeledButton|AddSlider|addtexturedbutton|addWebBrowser|LoadScreen|SetGodWidgetPosition|addWidget)\\b(?=\\s*\\()"
+		},
+		{
+			"name": "support.function.builtin.thyme",
+			"match": "(?i)\\b(sigSegv|Showsplashscreen)\\b"
+		},
+		{
+			"name": "variable.language.thyme",
+			"match": "(?i)\\b(debugCursor|debugDnD|debugTools|debugWeb|ARB_imaging|DereferenceNULLPtr|ListToolInstances|boxTextMarginFactor|boxTextScale|csg_tool|godMode|noASCIIPaths|NoSymbolicLinks|ResetTutorials|spoofClassmate|spoofFBOfail|spoofFBX|spoofSMART|spoofShaderFail|spoof_OS_Lang|suspendSketchRecog|textColor|vertexPolygonShrink|winTutorials|)\\b"
+		},
+		{
+			"name": "punctuation.accessor.thyme",
+			"match": "\\."
+		}
+		]
+	}]},
+
+
+
+"keys-api": {
+	"patterns": [
+	{
+		"begin": "(?i)\\b(keys)(\\.)",
+		"beginCaptures": {
+			"1": {
+				"name": "support.class.thyme"
+			},
+			"2": {
+				"name": "punctuation.accessor.thyme"
+			}
+		},
+		"end": "(?i)(?=[^A-Za-z0-9_])",
+		"patterns": [
+		{
+			"name": "support.function.builtin.thyme",
+			"match": "(?i)\\b(isDown|bind|unbind)\\b(?=\\s*\\()"
+		},
+		{
+			"name": "punctuation.accessor.thyme",
+			"match": "(?i)\\."
+		}
+		]
+	}]},
+
+
+
+"math-api": {
+	"patterns": [
+	{
+		"begin": "(?i)\\b(math)(\\.)",
+		"beginCaptures": {
+			"1": {
+				"name": "support.class.thyme"
+			},
+			"2": {
+				"name": "punctuation.accessor.thyme"
+			}
+		},
+		"end": "(?i)(?=[^A-Za-z0-9_])",
+		"patterns": [
+		{
+			"name": "variable.language.thyme",
+			"match": "(?i)\\b(pi|e)\\b"
+		},
+		{
+			"name": "support.function.math.thyme",
+			"match": "(?i)\\b(sqrt|sin|cos|tan|asin|acos|atan|atan2|min|max|vec.lenSq|vec.len|vec.distSq|vec.dist|sum|log|log10|and|or|boolnegate|comp.eq|comp.g|comp.ge|comp.l|comp.le|comp.ne|add|addlist|divide|mod|multiply|negate|posivate|pow|subtract|toBool|toFloat|toInt|toString|HSL2RGB|HSV2RGB|RGB2HSL|RGB2HSV)(?=\\s*\\()"
+		},
+		{
+			"name": "punctuation.accessor.thyme",
+			"match": "(?i)\\."
+		}
+		]
+	}]},
+
+
+
+"rand-api": {
+	"patterns": [
+	{
+		"begin": "(?i)\\b(rand)(\\.)",
+		"beginCaptures": {
+			"1": {
+				"name": "support.class.thyme"
+			},
+			"2": {
+				"name": "punctuation.accessor.thyme"
+			}
+		},
+		"end": "(?i)(?=[^A-Za-z0-9_])",
+		"patterns": [
+		{
+			"name": "variable.language.thyme",
+			"match": "(?i)\\b(boolean|direction2D|normal|normal2D|uniform01)\\b"
+		},
+		{
+			"name": "punctuation.accessor.thyme",
+			"match": "(?i)\\."
+		}
+		]
+	}]},
+
+
+
+"scene-api": {
+	"patterns": [
+	{
+		"begin": "(?i)\\b(Scene)(\\.)",
+		"beginCaptures": {
+			"1": {
+				"name": "support.class.thyme"
+			},
+			"2": {
+				"name": "punctuation.accessor.thyme"
+			}
+		},
+		"end": "(?=[^A-Za-z0-9_])",
+		"patterns": [
+		{
+			"name": "support.function.thyme",
+			"match": "(?i)\\b(addBox|addCircle|addContact|addFixjoint|addHinge|addLaserPen|addLineEndPoint|addPen|addPlane|addPolygon|addSpring|addThruster|addWater|removeEntity|addGroup|cloneEntityTo|entityByGeomID|entityByID|setBodyAttrib|setFilter|addLayer|selectLayer|moveToOrig|Open|SaveAs|importPhunlet|moveWorld|addGroup)(?=\\s*\\()"
+		},
+		{
+			"name": "support.function.builtin.thyme",
+			"match": "(?i)\\b(clear|eraseWater|makeModern|New|ScrambleZOrder)\\b"
+		},
+		{
+			"name": "support.class.thyme",
+			"match": "(?i)\\b(my|temp)\\b"
+		},
+		{
+			"name": "variable.language.thyme",
+			"match": "(?i)\\b(sounds|textures|controllAccelerationFollowCamera|gravityRotationOffset|algoboxID|author|description|fileDir|title)\\b"
+		},
+		{
+			"name": "punctuation.accessor.thyme",
+			"match": "\\."
+		}
+		]
+	}]},
+
+
+
+"set-api": {
+		"patterns": [
+		{
+			"begin": "(?i)\\b(set)(\\.)",
+			"beginCaptures": {
+				"1": {
+					"name": "support.class.thyme"
+				},
+				"2": {
+					"name": "punctuation.accessor.thyme"
+				}
+			},
+			"end": "(?i)(?=[^A-Za-z0-9_])",
+			"patterns": [
+			{
+				"name": "support.function.builtin.thyme",
+				"match": "(?i)\\b(insert|merge)\\b(?=\\s*\\()"
+			},
+			{
+				"name": "punctuation.accessor.thyme",
+				"match": "(?i)\\."
+			}
+		]
+		}]},
+
+
+
+"sph-api": {
+	"patterns": [
+	{
+		"begin": "(?i)\\b(sph)(\\.)",
+		"beginCaptures": {
+			"1": {
+				"name": "support.class.thyme"
+			},
+			"2": {
+				"name": "punctuation.accessor.thyme"
+			}
+		},
+		"end": "(?i)(?=[^A-Za-z0-9_])",
+		"patterns": [
+		{
+			"name": "support.function.builtin.thyme",
+			"match": "(?i)\\b(setClassicSPH|setNewSPH)\\b"
+		},
+		{
+			"name": "variable.language.thyme",
+			"match": "(?i)\\b(bucketSize|dens_constraint|directSolver|density|friction|geomFieldOffset|geomFriction|geomMassMultiplier|geometryFields|incompressible|influence|jitter|kernelMultiplier|kernelNormalize|lowMassCollisionRadiusFactor|maxNeighbors|minMassFactor|nonPenetration|pressMultiplier|radius|restitution|solveConst_dens|solveIters|solveSoftness|solveT_dens|sort|soundSpeed|specialPressure|spikyKernel|surfaceTension|unilateral|vaporizeTime|velocitySmoothing|viscMultiplier|viscosity)\\b"
+		},
+		{
+			"name": "punctuation.accessor.thyme",
+			"match": "(?i)\\."
+		}
+		]
+	}]},
+
+
+
+"string-api": {
+	"patterns": [
+	{
+		"begin": "(?i)\\b(string)(\\.)",
+		"beginCaptures": {
+			"1": {
+				"name": "support.class.thyme"
+			},
+			"2": {
+				"name": "punctuation.accessor.thyme"
+			}
+		},
+		"end": "(?i)(?=[^A-Za-z0-9_])",
+		"patterns": [
+		{
+			"name": "support.function.builtin.thyme",
+			"match": "(?i)\\b(length|split|str2list|list2str)\\b(?=\\s*\\()"
+		},
+		{
+			"name": "punctuation.accessor.thyme",
+			"match": "(?i)\\."
+		}
+		]
+	}]},
+
+
+
+"variables": {
+	"patterns": [
+	{
+		"name": "variable.other.scene.thyme",
+		"match": "(?i)(?<=\\bScene\\.my\\.)\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+	},
+	{
+		"name": "variable.other.scene.thyme",
+		"match": "(?i)(?<=\\bScene\\.temp\\.)\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+	},
+	{
+		"name": "variable.other.object.thyme",
+		"match": "(?i)\\b_[A-Za-z0-9_]+\\b"
+	}]},
+
+
+
+"event-special-object-properties": {
 	"patterns": [
 		{
-			"include": "#comments"
-		},
-		{
-			"include": "#numbers"
-		},
-		{
-			"include": "#booleans"
-		},
-		{
-			"include": "#strings"
-		},
-		{
-			"include": "#punctuation"
-		},
-		{
-			"include": "#api"
-		},
-		{
-			"include": "#variables"
-		},
-		{
-			"include": "#functions"
-		},
-		{
-			"include": "#event-object-properties"
+			"name": "support.variable.property.thyme",
+			"match": "(?i)(?<=\\bthis\\.|\\bother\\.)\\b(geom|pos)\\b"
 		}
-	],
+	]
+},
 
-	"repository": {
 
-		"comments": {
-			"patterns": [
-				{
-					"name": "comment.line.double-slash.thyme",
-					"match": "(?i)//.*$"
-				}
-			]
-		},
 
-		"numbers": {
-			"patterns": [
-				{
-					"name": "constant.numeric.float.decimal.thyme",
-					"match": "(?i)\\b\\d+\\.\\d+\\b"
-				},
-				{
-					"name": "constant.numeric.float.scientific.thyme",
-					"match": "(?i)\\b\\d+(\\.\\d+)?[eE][+-]?\\d+\\b"
-				},
-				{
-					"name": "constant.numeric.float.infinity.thyme",
-					"match": "(?i)(\\+|-)?inf|[+-]?∞"
-				},
-				{
-					"name": "constant.numeric.float.nan.thyme",
-					"match": "(?i)\\bNaN\\b"
-				},
-								{
-					"name": "constant.numeric.integer.decimal.thyme",
-					"match": "(?i)\\b\\d+\\b"
-				},
-				{
-					"name": "constant.numeric.integer.binary.thyme",
-					"match": "(?i)\\b0b[01]+\\b"
-				},
-				{
-					"name": "constant.numeric.integer.hex.thyme",
-					"match": "(?i)\\b0x[0-9A-Fa-f]+\\b"
-				}
-			]
-		},
+"event-object-properties": {
+	"patterns": [
+	{
+		"name": "variable.language.thyme",
+		"match": "(?i)\\b(color|colorHSVA|entityID|resources|timeToLive|zDepth|buttonMirror|buttonDestroy|layer|Liquify|adhesion|airFrictionMult|angle|angvel|area|attraction|attractionType|body|collideSet|collideWater|controllerAcc|controllerInvertX|controllerInvertY|controllerReverseXY|density|drawBorder|edgeBlur|friction|geomID|glued|heteroCollide|immortal|inertiaMultiplier|killer|materialName|materialVelocity|opaqueBorders|pos|reflectiveness|refractiveIndex|restitution|showForceArrows|showMomentum|showVelocity|texture|textureClamped|textureMatrix|vel|velocityDamping|forceController|ruler|size|text|textColor|textConstrained|textFont|textFontSize|textScale|drawCake|protractor|radius|forceVertexDrawing|surfaces|polyTrans|polyMeshResolution|allowDirectSolve|constant|dampingFactor|disableCollisions|forceDirectSolve|legacyMode|length|lineEndPoint0|lineEndPoint1|totImp|followGeometry|geom|relPoint|rotation|geom0|geom0pos|geom1|geom1pos|allowDirectSolve|autoBend|autoBreak|bend|bendConstant|bendTarget|ccw|distanceLimit|hingeConstant|impulseLimit|motor|motorSpeed|motorTorque|buttonBack|buttonBrake|buttonForward|totImp3|force|activationButton|cutter|fadeDist|maxCuts|maxRays|showLaserBodyAttrib|fadeTime)\\b"
+	}]},
 
-		"booleans": {
-			"patterns": [
-				{
-					"name": "constant.language.boolean.thyme",
-					"match": "(?i)\\b(true|false)\\b"
-				}
-			]
-		},
 
-		"strings": {
-			"patterns": [
-				{
-					"include": "#verbatim-string"
-				},
-				{
-					"include": "#normal-string"
-				}
-			]
-		},
 
-		"punctuation": {
-			"patterns": [
-				{
-					"name": "punctuation.definition.brackets.begin.thyme",
-					"match": "\\["
-				},
-				{
-					"name": "punctuation.definition.brackets.end.thyme",
-					"match": "\\]"
-				},
-				{
-					"name": "punctuation.definition.parentheses.begin.thyme",
-					"match": "\\("
-				},
-				{
-					"name": "punctuation.definition.parentheses.end.thyme",
-					"match": "\\)"
-				},
-				{
-					"name": "punctuation.definition.braces.begin.thyme",
-					"match": "\\{"
-				},
-				{
-					"name": "punctuation.definition.braces.end.thyme",
-					"match": "\\}"
-				},
-				{
-					"name": "punctuation.separator.comma.thyme",
-					"match": ","
-				}
-			]
-		},
-
-		"functions": {
-			"patterns": [
-				{
-					"name": "support.function.builtin.thyme",
-					"match": "(?i)\\bprint(?=\\s*\\()"
-				}
-			]
-		},
-
-		"api": {
-			"patterns": [
-				{
-					"include": "#event-api"
-				},
-				{
-					"include": "#rand-api"
-				},
-				{
-					"include": "#scene-api"
-				}
-			]
-		},
-
-		"event-api": {
-			"patterns": [
-				{
-				"begin": "\\b([A-Za-z_][A-Za-z0-9_]*)(\\.)(?=(this|other)\\b)",
-				"beginCaptures": {
-					"1": {
-					"name": "variable.parameter.thyme"
-					},
-					"2": {
-					"name": "punctuation.accessor.thyme"
-					}
-				},
-				"end": "(?=[^A-Za-z0-9_])",
-				"patterns": [
-					{
-					"name": "variable.language.thyme",
-					"match": "(?i)\\b(this|other)\\b"
-					}
-				]
-				}
-			]
-			},
-
-				"rand-api": {
-			"patterns": [
-				{
-					"begin": "\\b(rand)(\\.)",
-					"beginCaptures": {
-						"1": {
-							"name": "support.class.thyme"
-						},
-						"2": {
-							"name": "punctuation.accessor.thyme"
-						}
-					},
-					"end": "(?=[^A-Za-z0-9_])",
-					"patterns": [
-						{
-							"name": "variable.language.thyme",
-							"match": "(?i)\\b(boolean|direction2D|normal|normal2D|uniform01)\\b"
-						},
-						{
-							"name": "punctuation.accessor.thyme",
-							"match": "(?i)\\."
-						}
-					]
-				}
-			]
-		},
-
-		"scene-api": {
-			"patterns": [
-				{
-					"begin": "\\b(Scene)(\\.)",
-					"beginCaptures": {
-						"1": {
-							"name": "support.class.thyme"
-						},
-						"2": {
-							"name": "punctuation.accessor.thyme"
-						}
-					},
-					"end": "(?=[^A-Za-z0-9_])",
-					"patterns": [
-						{
-							"name": "variable.language.thyme",
-							"match": "(?i)\\b(my|temp|sounds|textures)\\b"
-						},
-						{
-							"name": "punctuation.accessor.thyme",
-							"match": "(?i)\\."
-						}
-					]
-				}
-			]
-		},
-
-		"variables": {
-			"patterns": [
-				{
-					"name": "variable.other.scene.thyme",
-					"match": "(?i)(?<=\\bScene\\.my\\.)\\b[A-Za-z_][A-Za-z0-9_]*\\b"
-				},
-				{
-					"name": "variable.other.scene.thyme",
-					"match": "(?i)(?<=\\bScene\\.temp\\.)\\b[A-Za-z_][A-Za-z0-9_]*\\b"
-				},
-				{
-					"name": "variable.other.object.thyme",
-					"match": "(?i)\\b_[A-Za-z0-9_]+\\b"
-				}
-			]
-		},
-
-		"event-object-properties": {
-			"patterns": [
-				{
-					"name": "support.variable.property.thyme",
-					"match": "(?i)(?<=\\b[A-Za-z_][A-Za-z0-9_]*\\.(?:this|other)\\.)\\b(color|colorHSVA|entityID|resources|timeToLive|zDepth|buttonMirror|buttonDestroy|layer|Liquify|adhesion|airFrictionMult|angle|angvel|area|attraction|attractionType|body|collideSet|collideWater|controllerAcc|controllerInvertX|controllerInvertY|controllerReverseXY|density|drawBorder|edgeBlur|friction|geomID|glued|heteroCollide|immortal|inertiaMultiplier|killer|materialName|materialVelocity|opaqueBorders|pos|reflectiveness|refractiveIndex|restitution|showForceArrows|showMomentum|showVelocity|texture|textureClamped|textureMatrix|vel|velocityDamping|forceController|ruler|size|text|textColor|textConstrained|textFont|textFontSize|textScale|drawCake|protractor|radius|forceVertexDrawing|surfaces|polyTrans|polyMeshResolution|allowDirectSolve|constant|dampingFactor|disableCollisions|forceDirectSolve|legacyMode|length|lineEndPoint0|lineEndPoint1|totImp|followGeometry|geom|relPoint|rotation|geom0|geom0pos|geom1|geom1pos|allowDirectSolve|autoBend|autoBreak|bend|bendConstant|bendTarget|ccw|distanceLimit|hingeConstant|impulseLimit|motor|motorSpeed|motorTorque|buttonBack|buttonBrake|buttonForward|totImp3|force|activationButton|cutter|fadeDist|maxCuts|maxRays|showLaserBodyAttrib|fadeTime)\\b"
-				}
-			]
-		},
-
-		"normal-string": {
-			"name": "string.quoted.double.thyme",
-			"begin": "\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"include": "#markup"
-				},
-				{
-					"include": "#escapes"
-				}
-			]
-		},
-
-		"verbatim-string": {
-			"name": "string.quoted.double.verbatim.thyme",
-			"begin": "@\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"include": "#markup"
-				},
-				{
-					"include": "#verbatim-escapes"
-				}
-			]
-		},
-
-		"escapes": {
-			"patterns": [
-				{
-					"name": "constant.character.escape.thyme",
-					"match": "\\\\(\\\\|\"|n|t)"
-				}
-			]
-		},
-
-		"verbatim-escapes": {
-			"patterns": [
-				{
-					"name": "constant.character.escape.verbatim.thyme",
-					"match": "\"\""
-				}
-			]
-		},
-
-		"markup": {
-			"patterns": [
-
-				{
-					"name": "constant.character.escape.entity.thyme",
-					"match": "&(amp|apos|gt|lt|quot);"
-				},
-
-				{
-					"name": "constant.character.escape.entity.numeric.thyme",
-					"match": "&#\\d+;"
-				},
-
-				{
-					"name": "constant.character.escape.entity.numeric.thyme",
-					"match": "&#x[0-9A-Fa-f]+;"
-				},
-
-				{
-					"name": "constant.character.escape.markup.thyme",
-					"match": "</?(markup|b|i|u|s|tt|big|small|sup|sub)\\s*>"
-				},
-
-				{
-					"begin": "<span\\b",
-					"beginCaptures": {
-						"0": {
-							"name": "constant.character.escape.markup.thyme"
-						}
-					},
-					"end": ">",
-					"endCaptures": {
-						"0": {
-							"name": "constant.character.escape.markup.thyme"
-						}
-					},
-					"patterns": [
-						{
-							"name": "entity.other.attribute-name.thyme",
-							"match": "\\b[a-zA-Z_][a-zA-Z0-9_-]*(?=\\=)"
-						},
-						{
-							"name": "keyword.operator.assignment.thyme",
-							"match": "="
-						},
-						{
-							"name": "string.quoted.double.attribute-value.thyme",
-							"begin": "\"",
-							"end": "\""
-						}
-					]
-				},
-
-				{
-					"name": "constant.character.escape.markup.thyme",
-					"match": "</span\\s*>"
-				}
-
-			]
-		}
-	}
+"event-properties": {
+	"patterns": [
+	{
+		"name": "entity.name.function.thyme",
+		"match": "(?i)(?<=\\.)\\b(this|other|clickCount|handled|normal|soundGain|pos|geom|hsv|laser|keyChar|keyCode|pressed|handled|dt)\\b"
+	}]
 }
+
+
+
+}}
