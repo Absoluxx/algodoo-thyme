@@ -11,6 +11,7 @@
 - Coloring for rand and its child properties.
 - Coloring for Scene and object variables.
 - Coloring for every single object property.
+- Coloring for markups in strings.
 - Made the grammar case insensitive.
 - Allowed the event argument parameter to be named anything.
 - Minor organization improvements in the files.
